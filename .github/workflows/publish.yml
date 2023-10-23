@@ -19,6 +19,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           scope: '@vira-org'
+          always-auth: true
 
       - run: yarn install --frozen-lockfile
       - run: yarn publish
