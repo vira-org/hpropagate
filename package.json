@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:WealthWizardsEngineering/hpropagate.git"
+    "url": "git+https://github.com/vira-org/hpropagate.git"
   },
   "devDependencies": {
     "eslint": "^8.52.0",
