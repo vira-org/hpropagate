@@ -30,7 +30,7 @@ function doTest(frontEndIsHttps, backEndIsHttps, clientBuilder) {
       tsServer = await testSubjectServer({ isHttps: frontEndIsHttps, client: callerInServer });
       const callerInClient = promisify(clientBuilder.fn(frontEndIsHttps, tsServer));
       const headersToPropogate = {
-        'x-correlation-id': 'test',
+        'x-request-id': 'test',
       };
       const headersNotToPropagate = {
         'x-something-else': 'something',

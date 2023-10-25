@@ -12,9 +12,7 @@
   },
   "author": "Wealth Wizards Engineering",
   "license": "MIT",
-  "dependencies": {
-    "uuid": "^9.0.1"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vira-org/hpropagate.git"

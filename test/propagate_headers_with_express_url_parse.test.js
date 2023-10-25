@@ -140,15 +140,15 @@ test('should propagate headers when parsing urls without headers', assert => {
 
   withOutboundService(async service => {
     service.on('request', req => {
-      assert.equal(req.headers['x-correlation-id'], correlationId);
+      assert.equal(req.headers['x-request-id'], correlationId);
     });
 
     const response = await supertest(app)
       .get('/')
-      .set('x-correlation-id', correlationId);
+      .set('x-request-id', correlationId);
 
     assert.equal(response.statusCode, 200);
-    assert.equal(correlationId, response.headers['x-correlation-id']);
+    assert.equal(correlationId, response.headers['x-request-id']);
   });
 });
 
@@ -175,7 +175,7 @@ test('should propagate headers similarly for all http.request and http.get metho
     service.on('request', req => {
       assert.equal(req.headers['x-custom-2'], custom2);
       assert.equal(typeof req.headers['x-custom-3'], 'undefined');
-      assert.equal(req.headers['x-correlation-id'], correlationId);
+      assert.equal(req.headers['x-request-id'], correlationId);
     });
 
     for (let i = 0; i < urlPaths.length; i += 1) {
@@ -184,10 +184,10 @@ test('should propagate headers similarly for all http.request and http.get metho
         .get(urlPaths[i])
         .set('x-custom-2', custom2)
         .set('x-custom-3', custom3)
-        .set('x-correlation-id', correlationId);
+        .set('x-request-id', correlationId);
 
       assert.equal(response.statusCode, 200);
-      assert.equal(correlationId, response.headers['x-correlation-id']);
+      assert.equal(correlationId, response.headers['x-request-id']);
     }
   });
 });

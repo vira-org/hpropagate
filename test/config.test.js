@@ -1,29 +1,10 @@
 const test = require('tape');
 const configLoader = require('../lib/config');
 
-const defaultHeadersToCollect = [
-  'x-request-id',
-  'x-b3-traceid',
-  'x-b3-spanid',
-  'x-b3-parentspanid',
-  'x-b3-sampled',
-  'x-b3-flags',
-  'x-ot-span-context',
-  'x-variant-id',
-  'x-feature-flags',
-];
+const defaultHeadersToCollect = [];
 
 const defaultHeadersToInject = [
-  'x-correlation-id',
   'x-request-id',
-  'x-b3-traceid',
-  'x-b3-spanid',
-  'x-b3-parentspanid',
-  'x-b3-sampled',
-  'x-b3-flags',
-  'x-ot-span-context',
-  'x-variant-id',
-  'x-feature-flags',
 ];
 
 test('should provide correlation id header name', assert => {
@@ -31,7 +12,7 @@ test('should provide correlation id header name', assert => {
 
   const config = configLoader.load();
 
-  assert.equal(config.correlationIdHeader, 'x-correlation-id');
+  assert.equal(config.generateAndPropagateHeader, 'x-request-id');
 });
 
 test('should load default config', assert => {
@@ -47,7 +28,7 @@ test('should be able to disable propagating correlation id', assert => {
   assert.plan(2);
 
   const config = configLoader.load({
-    setAndPropagateCorrelationId: false,
+    setAndPropagateRequestId: false,
   });
 
   assert.deepEqual(config.headersToCollect, defaultHeadersToCollect);
@@ -58,7 +39,7 @@ test('should be able to override headers list', assert => {
   assert.plan(2);
 
   const config = configLoader.load({
-    setAndPropagateCorrelationId: false,
+    setAndPropagateRequestId: false,
     headersToPropagate: [
       'x-custom-header-1',
       'x-custom-header-2',
@@ -83,7 +64,7 @@ test('should automatically propagate correlation id', assert => {
   });
 
   assert.deepEqual(config.headersToInject, [
-    'x-correlation-id',
+    'x-request-id',
     'das-header',
   ]);
 });

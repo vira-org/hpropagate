@@ -71,15 +71,15 @@ test('should propagate correlation id if received on request', assert => {
     // we can intercept the outbound request to assert that the headers
     // are properly propagated
     service.on('request', req => {
-      assert.equal(req.headers['x-correlation-id'], correlationId);
+      assert.equal(req.headers['x-request-id'], correlationId);
     });
 
     const response = await supertest(app)
       .get('/')
-      .set('x-correlation-id', correlationId);
+      .set('x-request-id', correlationId);
 
     assert.equal(response.statusCode, 200);
-    assert.equal(correlationId, response.headers['x-correlation-id']);
+    assert.equal(correlationId, response.headers['x-request-id']);
   });
 });
 
@@ -89,14 +89,14 @@ test('should set and propagate correlation id if not received on request', asser
   withOutboundService(async service => {
     let outboundCorrelationId;
     service.on('request', req => {
-      outboundCorrelationId = req.headers['x-correlation-id'];
+      outboundCorrelationId = req.headers['x-request-id'];
     });
 
     const response = await supertest(app).get('/');
 
     assert.equal(response.statusCode, 200);
-    assert.ok(uuidRegex.test(response.headers['x-correlation-id']));
-    assert.equal(outboundCorrelationId, response.headers['x-correlation-id']);
+    assert.ok(uuidRegex.test(response.headers['x-request-id']));
+    assert.equal(outboundCorrelationId, response.headers['x-request-id']);
   });
 });
 
@@ -122,18 +122,18 @@ test('should not propagate correlation id when asked not to', assert => {
   assert.plan(3);
 
   hpropagate({
-    setAndPropagateCorrelationId: false,
+    setAndPropagateRequestId: false,
   });
 
   withOutboundService(async service => {
     service.on('request', req => {
-      assert.ok(typeof req.headers['x-correlation-id'] === 'undefined');
+      assert.ok(typeof req.headers['x-request-id'] === 'undefined');
     });
 
     const response = await supertest(app).get('/');
 
     assert.equal(response.statusCode, 200);
-    assert.ok(typeof response.headers['x-correlation-id'] === 'undefined');
+    assert.ok(typeof response.headers['x-request-id'] === 'undefined');
   });
 });
 
